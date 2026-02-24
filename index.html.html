@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OraTrack Android Application - Kotlin Source Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                        },
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F8F8F8;
+            color: #333333;
+            scroll-behavior: smooth;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+        }
+        .code-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .code-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .code-container::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        .code-container::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+        /* Simple Syntax Highlighting Styles */
+        .token-keyword { color: #cf222e; font-weight: 500; }
+        .token-string { color: #0a3069; }
+        .token-comment { color: #6e7781; font-style: italic; }
+        .token-annotation { color: #953800; }
+        .token-type { color: #0550ae; }
+        .token-function { color: #8250df; }
+        .token-number { color: #0550ae; }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Header Section -->
+    <header class="sticky top-0 z-50 w-full glass-card py-6 mb-12">
+        <div class="max-w-5xl mx-auto px-6 flex justify-between items-center">
+            <div>
+                <h1 class="font-display text-2xl md:text-3xl font-800 tracking-tight text-slate-900">
+                    OraTrack <span class="text-primary-500">Android</span>
+                </h1>
+                <p class="text-sm text-slate-500 font-medium">Kotlin Source Code Documentation</p>
+            </div>
+            <nav class="hidden md:flex space-x-6 text-sm font-semibold text-slate-600">
+                <a href="#structure" class="hover:text-primary-600 transition-colors">Structure</a>
+                <a href="#code" class="hover:text-primary-600 transition-colors">Core Modules</a>
+                <a href="#logic" class="hover:text-primary-600 transition-colors">Business Logic</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-6 pb-24">
+        
+        <!-- Hero Summary Section -->
+        <section id="structure" class="mb-16">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 glass-card rounded-3xl p-8 bg-gradient-to-br from-white to-orange-50/30">
+                    <h2 class="font-display text-xl font-bold mb-4 flex items-center gap-2">
+                        <svg class="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Project Architecture
+                    </h2>
+                    <p class="text-slate-600 leading-relaxed mb-6">
+                        OraTrack is a modern Android application built with <span class="font-semibold text-slate-800">Jetpack Compose</span>, <span class="font-semibold text-slate-800">Hilt</span> for dependency injection, and <span class="font-semibold text-slate-800">Room</span> for offline-first persistence. It features a reactive data layer and a robust scheduling system via <span class="font-semibold text-slate-800">WorkManager</span>.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <span class="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wider">Kotlin 1.9</span>
+                        <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">Material 3</span>
+                        <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase tracking-wider">MVVM</span>
+                        <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wider">Dagger Hilt</span>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-center items-center text-center">
+                    <div class="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="font-display text-4xl font-800 text-slate-900">1.0</h3>
+                    <p class="text-slate-500 font-medium uppercase text-[10px] tracking-[0.2em]">Application Version</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Block Section -->
+        <section id="code" class="space-y-12">
+            
+            <!-- Dependency Config -->
+            <div class="group">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono text-sm">01</div>
+                    <h3 class="font-display text-xl font-bold text-slate-800">build.gradle.kts (App Level)</h3>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="bg-slate-100 px-6 py-2 border-b border-slate-200 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+                        <span class="ml-4 text-[10px] font-mono text-slate-500 font-bold uppercase tracking-widest">Groovy/Kotlin DSL</span>
+                    </div>
+                    <div class="p-6 bg-[#fdfdfd] code-container overflow-x-auto">
+<pre class="font-mono text-sm leading-relaxed text-slate-700">
+<span class="token-function">plugins</span> {
+    <span class="token-function">id</span>(<span class="token-string">"com.android.application"</span>)
+    <span class="token-function">id</span>(<span class="token-string">"org.jetbrains.kotlin.android"</span>)
+    <span class="token-function">id</span>(<span class="token-string">"com.google.devtools.ksp"</span>)
+    <span class="token-function">id</span>(<span class="token-string">"com.google.dagger.hilt.android"</span>)
+}
+
+<span class="token-function">android</span> {
+    namespace = <span class="token-string">"com.oratry.oratrack"</span>
+    compileSdk = <span class="token-number">34</span>
+
+    <span class="token-function">defaultConfig</span> {
+        applicationId = <span class="token-string">"com.oratry.oratrack"</span>
+        minSdk = <span class="token-number">24</span>
+        targetSdk = <span class="token-number">34</span>
+        versionCode = <span class="token-number">1</span>
+        versionName = <span class="token-string">"1.0"</span>
+    }
+    
+    <span class="token-function">buildFeatures</span> {
+        compose = <span class="token-keyword">true</span>
+    }
+}
+
+<span class="token-function">dependencies</span> {
+    <span class="token-comment">// Jetpack Compose & UI</span>
+    <span class="token-function">implementation</span>(platform(<span class="token-string">"androidx.compose:compose-bom:2023.08.00"</span>))
+    <span class="token-function">implementation</span>(<span class="token-string">"androidx.compose.ui:ui"</span>)
+    <span class="token-function">implementation</span>(<span class="token-string">"androidx.compose.material3:material3"</span>)
+    
+    <span class="token-comment">// Architecture Components</span>
+    <span class="token-function">implementation</span>(<span class="token-string">"com.google.dagger:hilt-android:2.48"</span>)
+    <span class="token-function">ksp</span>(<span class="token-string">"com.google.dagger:hilt-compiler:2.48"</span>)
+    <span class="token-function">implementation</span>(<span class="token-string">"androidx.room:room-runtime:2.6.1"</span>)
+    <span class="token-function">ksp</span>(<span class="token-string">"androidx.room:room-compiler:2.6.1"</span>)
+    
+    <span class="token-comment">// Visualization</span>
+    <span class="token-function">implementation</span>(<span class="token-string">"com.github.PhilJay:MPAndroidChart:v3.1.0"</span>)
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Logic Entity -->
+            <div id="logic" class="group">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono text-sm">02</div>
+                    <h3 class="font-display text-xl font-bold text-slate-800">PrayerEntity.kt</h3>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="bg-slate-100 px-6 py-2 border-b border-slate-200 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-slate-300"></div>
+                        <span class="ml-4 text-[10px] font-mono text-slate-500 font-bold uppercase tracking-widest">Kotlin Model</span>
+                    </div>
+                    <div class="p-6 bg-[#fdfdfd] code-container overflow-x-auto">
+<pre class="font-mono text-sm leading-relaxed text-slate-700">
+<span class="token-annotation">@Entity</span>(tableName = <span class="token-string">"prayers"</span>)
+<span class="token-keyword">data class</span> <span class="token-type">PrayerEntity</span>(
+    <span class="token-annotation">@PrimaryKey</span>(autoGenerate = <span class="token-keyword">true</span>) 
+    <span class="token-keyword">val</span> id: <span class="token-type">Long</span> = <span class="token-number">0</span>,
+    <span class="token-keyword">val</span> name: <span class="token-type">String</span>,
+    <span class="token-keyword">val</span> type: <span class="token-type">PrayerType</span>,
+    <span class="token-keyword">val</span> order: <span class="token-type">Int</span>,
+    <span class="token-keyword">val</span> isEnabled: <span class="token-type">Boolean</span> = <span class="token-keyword">true</span>,
+    <span class="token-keyword">val</span> createdAt: <span class="token-type">Long</span> = <span class="token-type">System</span>.<span class="token-function">currentTimeMillis</span>()
+)
+
+<span class="token-keyword">enum class</span> <span class="token-type">PrayerType</span> {
+    STANDARD, CUSTOM
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Repository Implementation -->
+            <div class="group">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono text-sm">03</div>
+                    <h3 class="font-display text-xl font-bold text-slate-800">PrayerRepositoryImpl.kt</h3>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="bg-slate-100 px-6 py-2 border-b border-slate-200 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-slate-300"></div>
+                        <span class="ml-4 text-[10px] font-mono text-slate-500 font-bold uppercase tracking-widest">Business Logic Layer</span>
+                    </div>
+                    <div class="p-6 bg-[#fdfdfd] code-container overflow-x-auto">
+<pre class="font-mono text-sm leading-relaxed text-slate-700">
+<span class="token-keyword">class</span> <span class="token-type">PrayerRepositoryImpl</span> <span class="token-annotation">@Inject constructor</span>(
+    <span class="token-keyword">private val</span> prayerDao: <span class="token-type">PrayerDao</span>,
+    <span class="token-keyword">private val</span> prayerLogDao: <span class="token-type">PrayerLogDao</span>
+) : <span class="token-type">PrayerRepository</span> {
+
+    <span class="token-keyword">override suspend fun</span> <span class="token-function">logPrayer</span>(
+        prayerId: <span class="token-type">Long</span>, 
+        isPerformed: <span class="token-type">Boolean</span>, 
+        notes: <span class="token-type">String</span>?, 
+        timestamp: <span class="token-type">Instant</span>
+    ) {
+        <span class="token-keyword">val</span> (start, end) = <span class="token-type">DateUtils</span>.<span class="token-function">getDayStartAndEnd</span>(timestamp)
+        <span class="token-keyword">val</span> existingLog = prayerLogDao.<span class="token-function">getLogForPrayerAndDay</span>(prayerId, start, end)
+        
+        <span class="token-keyword">if</span> (existingLog != <span class="token-keyword">null</span>) {
+            prayerLogDao.<span class="token-function">updatePrayerLog</span>(
+                existingLog.<span class="token-function">copy</span>(isPerformed = isPerformed, notes = notes)
+            )
+        } <span class="token-keyword">else</span> {
+            prayerLogDao.<span class="token-function">insertPrayerLog</span>(
+                <span class="token-type">PrayerLogEntity</span>(prayerId = prayerId, isPerformed = isPerformed, timestamp = timestamp)
+            )
+        }
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UI State Example -->
+            <div class="group">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-mono text-sm">04</div>
+                    <h3 class="font-display text-xl font-bold text-slate-800">MainActivity.kt (Entry Point)</h3>
+                </div>
+                <div class="glass-card rounded-2xl overflow-hidden">
+                    <div class="bg-slate-100 px-6 py-2 border-b border-slate-200 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-slate-300"></div>
+                        <span class="ml-4 text-[10px] font-mono text-slate-500 font-bold uppercase tracking-widest">Activity & UI Shell</span>
+                    </div>
+                    <div class="p-6 bg-[#fdfdfd] code-container overflow-x-auto">
+<pre class="font-mono text-sm leading-relaxed text-slate-700">
+<span class="token-annotation">@AndroidEntryPoint</span>
+<span class="token-keyword">class</span> <span class="token-type">MainActivity</span> : <span class="token-type">ComponentActivity</span>() {
+    <span class="token-keyword">override fun</span> <span class="token-function">onCreate</span>(savedInstanceState: <span class="token-type">Bundle</span>?) {
+        <span class="token-keyword">super</span>.<span class="token-function">onCreate</span>(savedInstanceState)
+        <span class="token-function">setContent</span> {
+            <span class="token-keyword">val</span> viewModel: <span class="token-type">MainViewModel</span> = <span class="token-function">hiltViewModel</span>()
+            <span class="token-keyword">val</span> isDarkMode <span class="token-keyword">by</span> viewModel.isDarkMode.<span class="token-function">collectAsStateWithLifecycle</span>()
+
+            <span class="token-type">OraTrackTheme</span>(darkTheme = isDarkMode) {
+                <span class="token-type">OraTrackAppContent</span>()
+            }
+        }
+    }
+}
+
+<span class="token-annotation">@Composable</span>
+<span class="token-keyword">fun</span> <span class="token-function">OraTrackAppContent</span>() {
+    <span class="token-keyword">val</span> navController = <span class="token-function">rememberNavController</span>()
+    <span class="token-type">Scaffold</span>(
+        bottomBar = { <span class="token-type">BottomNavigationBar</span>(navController) }
+    ) { padding ->
+        <span class="token-type">OraTrackNavHost</span>(navController, <span class="token-type">Modifier</span>.<span class="token-function">padding</span>(padding))
+    }
+}</pre>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Technical Highlights -->
+        <section class="mt-20">
+            <h2 class="font-display text-2xl font-bold text-slate-900 mb-8 text-center">Core System Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="flex gap-6 p-6 glass-card rounded-2xl hover:scale-[1.02] transition-transform">
+                    <div class="flex-shrink-0 w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Advanced Analytics</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Integrated MPAndroidChart for visualizing prayer consistency over a 30-day window with high-performance data binding.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 glass-card rounded-2xl hover:scale-[1.02] transition-transform">
+                    <div class="flex-shrink-0 w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Dynamic Scheduling</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Leverages WorkManager for precise notification delivery and periodic database backups even when the app is inactive.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 glass-card rounded-2xl hover:scale-[1.02] transition-transform">
+                    <div class="flex-shrink-0 w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">Secure Backup</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Full SQLite database export and import using Android's Storage Access Framework for user-controlled data ownership.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 p-6 glass-card rounded-2xl hover:scale-[1.02] transition-transform">
+                    <div class="flex-shrink-0 w-12 h-12 bg-slate-100 text-slate-800 rounded-xl flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-800 mb-1">State Management</h4>
+                        <p class="text-sm text-slate-500 leading-relaxed">Robust DataStore integration for persistent user preferences like Theme Selection and notification intervals.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Interactive Elements for Premium Feel
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'rgba(249, 115, 22, 0.4)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+            });
+        });
+
+        // Simple smooth scroll highlighting
+        window.addEventListener('scroll', () => {
+            const navLinks = document.querySelectorAll('nav a');
+            const fromTop = window.scrollY + 100;
+
+            navLinks.forEach(link => {
+                const section = document.querySelector(link.getAttribute('href'));
+                if (
+                    section.offsetTop <= fromTop &&
+                    section.offsetTop + section.offsetHeight > fromTop
+                ) {
+                    link.classList.add('text-primary-600');
+                    link.classList.add('scale-105');
+                } else {
+                    link.classList.remove('text-primary-600');
+                    link.classList.remove('scale-105');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
