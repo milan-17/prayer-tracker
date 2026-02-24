@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OraTrack - Advanced Prayer Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+    font-family: 'Segoe UI', sans-serif;
+    margin:0;
+    background: linear-gradient(135deg,#1e1e2f,#2b2b45);
+    color:white;
+}
+header{
+    padding:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+}
+.container{padding:15px;}
+.card{
+    background: rgba(255,255,255,0.08);
+    padding:15px;
+    margin-bottom:15px;
+    border-radius:15px;
+}
+button{
+    padding:6px 10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin:3px;
+}
+.primary{background:#ff7b00;color:white;}
+.secondary{background:#444;color:white;}
+input, select{
+    padding:6px;
+    border-radius:6px;
+    border:none;
+    margin:5px 0;
+}
+.footer{text-align:center;font-size:12px;opacity:0.6;padding:15px;}
+</style>
+</head>
+
+<body>
+
+<header>OraTrack - Daily Prayer Companion</header>
+
+<div class="container">
+
+<div class="card">
+<h3 id="dateDisplay"></h3>
+<div id="prayerList"></div>
+</div>
+
+<div class="card">
+<h3>Add Prayer</h3>
+<input type="text" id="prayerName" placeholder="Prayer Name">
+<select id="prayerType">
+<option value="count">Count Type</option>
+<option value="boolean">Boolean Type</option>
+</select>
+<input type="time" id="reminderTime">
+<button class="primary" onclick="addPrayer()">Add Prayer</button>
+</div>
+
+<div class="card">
+<h3>Today Analytics</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+<h3>Backup</h3>
+<button class="primary" onclick="exportData()">Export</button>
+<input type="file" onchange="importData(event)">
+</div>
+
+</div>
+
+<div class="footer">Offline • Private • Date-Based Tracking</div>
+
+<script>
+
+/* ================= SAFE STORAGE INIT ================= */
+
+let storedData = localStorage.getItem("oraData");
+let data;
+
+try {
+    data = storedData ? JSON.parse(storedData) : null;
+} catch (e) {
+    data = null;
+}
+
+if (!data || !data.prayers || !data.logs) {
+    data = {
+        prayers: [],
+        logs: {}
+    };
+}
+
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("dateDisplay").innerText = "Today: " + today;
+
+if(!data.logs[today]) data.logs[today] = {};
+
+/* ================= SAVE ================= */
+
+function save(){
+    localStorage.setItem("oraData", JSON.stringify(data));
+    render();
+}
+
+/* ================= ADD PRAYER ================= */
+
+function addPrayer(){
+    let name = document.getElementById("prayerName").value.trim();
+    let type = document.getElementById("prayerType").value;
+    let reminder = document.getElementById("reminderTime").value;
+
+    if(!name) return alert("Enter prayer name");
+
+    data.prayers.push({
+        id: Date.now(),
+        name,
+        type,
+        reminder
+    });
+
+    document.getElementById("prayerName").value="";
+    save();
+}
+
+/* ================= RENDER ================= */
+
+function render(){
+    let list = document.getElementById("prayerList");
+    list.innerHTML="";
+
+    data.prayers.forEach(prayer=>{
+        let value = data.logs[today][prayer.id];
+
+        let div = document.createElement("div");
+        div.style.marginBottom="10px";
+
+        if(prayer.type === "count"){
+            if(typeof value !== "number") value=0;
+
+            div.innerHTML = `
+            <strong>${prayer.name}</strong> (${value})
+            <button class="primary" onclick="updateCount(${prayer.id},1)">+</button>
+            <button class="secondary" onclick="updateCount(${prayer.id},-1)">-</button>
+            <br><small>Reminder: ${prayer.reminder||'None'}</small>
+            `;
+        }else{
+            let checked = value ? "checked" : "";
+            div.innerHTML = `
+            <strong>${prayer.name}</strong>
+            <input type="checkbox" ${checked}
+            onchange="updateBoolean(${prayer.id}, this.checked)">
+            <br><small>Reminder: ${prayer.reminder||'None'}</small>
+            `;
+        }
+
+        list.appendChild(div);
+    });
+
+    updateChart();
+}
+
+/* ================= UPDATE LOG ================= */
+
+function updateCount(id,delta){
+    if(typeof data.logs[today][id] !== "number")
+        data.logs[today][id]=0;
+
+    data.logs[today][id]+=delta;
+
+    if(data.logs[today][id]<0)
+        data.logs[today][id]=0;
+
+    save();
+}
+
+function updateBoolean(id,value){
+    data.logs[today][id]=value;
+    save();
+}
+
+/* ================= BACKUP ================= */
+
+function exportData(){
+    let blob=new Blob([JSON.stringify(data)],{type:"application/json"});
+    let a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="oratrack_backup.json";
+    a.click();
+}
+
+function importData(event){
+    let file=event.target.files[0];
+    let reader=new FileReader();
+    reader.onload=function(e){
+        try{
+            data=JSON.parse(e.target.result);
+            save();
+        }catch(err){
+            alert("Invalid backup file");
+        }
+    }
+    reader.readAsText(file);
+}
+
+/* ================= ANALYTICS ================= */
+
+function updateChart(){
+    let ctx=document.getElementById('chart').getContext('2d');
+    if(window.myChart) window.myChart.destroy();
+
+    let counts = data.prayers.map(p=>{
+        let val = data.logs[today][p.id];
+        return typeof val==="number"?val:(val?1:0);
+    });
+
+    window.myChart=new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels:data.prayers.map(p=>p.name),
+            datasets:[{
+                label:'Today',
+                data:counts
+            }]
+        }
+    });
+}
+
+/* ================= REMINDER SYSTEM ================= */
+
+function checkReminders(){
+    let now = new Date();
+    let currentTime = now.toTimeString().slice(0,5);
+
+    data.prayers.forEach(prayer=>{
+        if(prayer.reminder && prayer.reminder === currentTime){
+            let value = data.logs[today][prayer.id];
+
+            let incomplete =
+                (prayer.type==="count" && (!value || value===0)) ||
+                (prayer.type==="boolean" && !value);
+
+            if(incomplete){
+                alert("Reminder: Complete " + prayer.name);
+            }
+        }
+    });
+}
+
+setInterval(checkReminders,60000);
+
+/* ================= INIT ================= */
+
+render();
+
+</script>
+
+</body>
+</html>
